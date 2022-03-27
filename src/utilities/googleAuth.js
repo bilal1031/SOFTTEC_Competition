@@ -5,7 +5,7 @@ import {
 import * as Google from "expo-google-app-auth";
 import { auth, db, googleAuthProvider } from "../config/firebase";
 
-const createUser = (user) => {
+const createUser = (user, setIsLogged) => {
   db.collection("users")
     .doc(user.email.toLowerCase())
     .set({
@@ -39,7 +39,7 @@ export const googleAuth = async (setIsLogged) => {
         .signInWithCredential(credential)
         .then(async (userCredential) => {
           const user = userCredential.user;
-          createUser(user);
+          createUser(user, setIsLogged);
         })
         .catch((error) => {
           alert(error);
