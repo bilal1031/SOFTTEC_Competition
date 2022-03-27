@@ -113,7 +113,9 @@ function RegisterScreen({ navigation }) {
               source={require("../assets/googleLogo.png")}
             />
           </View>
-          <Text style={styles.googleLoginText}>Or Login with Google</Text>
+          <Text style={styles.googleLoginText}>
+            Login With Google (participants)
+          </Text>
         </View>
       </TouchableNativeFeedback>
     </View>

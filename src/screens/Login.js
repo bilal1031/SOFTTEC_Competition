@@ -95,7 +95,9 @@ export default function Login({ navigation }) {
               source={require("../assets/googleLogo.png")}
             />
           </View>
-          <Text style={styles.googleLoginText}>Login With Google</Text>
+          <Text style={styles.googleLoginText}>
+            Login With Google (participants)
+          </Text>
         </View>
       </TouchableNativeFeedback>
       <ImageBackground
