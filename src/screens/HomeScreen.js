@@ -25,6 +25,8 @@ function HomeScreen({}) {
   const [programming, setProgramming] = useState([]);
   const [gaming, setGaming] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [list, setList] = useState([]);
+
   const { eventTimings, setEventTimings } = useStates();
 
   const data = [
@@ -43,36 +45,21 @@ function HomeScreen({}) {
   ];
 
   useEffect(() => {
-    let temp1 = [],
-      temp2 = [],
-      temp3 = [],
-      temp4 = [];
+    let temp1 = [];
 
     firebase
       .firestore()
       .collection("competitions")
       .onSnapshot((snapshot) => {
         if (snapshot.empty) return;
+        temp1 = [];
 
         snapshot.forEach((item) => {
-          if (item.data().category == "Web Dev")
-            temp1.push({ ...item.data(), id: item.id });
-          else if (item.data().category == "App Dev")
-            temp2.push({ ...item.data(), id: item.id });
-          else if (item.data().category == "Programming")
-            temp3.push({ ...item.data(), id: item.id });
-          else if (item.data().category == "Gaming")
-            temp4.push({ ...item.data(), id: item.id });
+          temp1.push({ ...item.data(), id: item.id });
         });
 
-        setWebDev(temp1);
-        setAppDev(temp2);
-        setProgramming(temp3);
-        setGaming(temp4);
-
-        let temp = [...temp1, ...temp2, ...temp3, ...temp4];
-
-        setEventTimings(temp);
+        setList(temp1);
+        setEventTimings(temp1);
         setLoading(false);
       });
   }, []);
@@ -132,21 +119,28 @@ function HomeScreen({}) {
             </View>
           ) : (
             <>
-              {appDev.length !== 0 && (
-                <Section sectionTitle="App Development" flatListData={appDev} />
-              )}
-              {webDev.length !== 0 && (
-                <Section sectionTitle="Web Development" flatListData={webDev} />
-              )}
-              {programming.length !== 0 && (
-                <Section
-                  sectionTitle="Programming"
-                  flatListData={programming}
-                />
-              )}
-              {gaming.length !== 0 && (
-                <Section sectionTitle="Gaming" flatListData={gaming} />
-              )}
+              <Section
+                sectionTitle="App Development"
+                flatListData={list.filter(
+                  (item) => item.category === "App Dev"
+                )}
+              />
+              <Section
+                sectionTitle="Web Development"
+                flatListData={list.filter(
+                  (item) => item.category === "Web Dev"
+                )}
+              />
+              <Section
+                sectionTitle="Programming"
+                flatListData={list.filter(
+                  (item) => item.category === "Programming"
+                )}
+              />
+              <Section
+                sectionTitle="Gaming"
+                flatListData={list.filter((item) => item.category === "Gaming")}
+              />
             </>
           )}
         </View>

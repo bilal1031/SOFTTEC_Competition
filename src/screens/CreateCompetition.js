@@ -14,7 +14,7 @@ import CustomTextInput from "../components/CustomTextInput";
 import { FontAwesome } from "@expo/vector-icons";
 import { auth, db, storage } from "../config/firebase";
 
-const CreateCompetition = () => {
+const CreateCompetition = ({ navigation }) => {
   const [imageUri, setImageUri] = useState("");
   const [eventName, setEventName] = useState("");
   const [hourStarting, setHourStarting] = useState("");
@@ -114,7 +114,10 @@ const CreateCompetition = () => {
                     totalParticipants: 0,
                     participantsID: [],
                   })
-                  .then(() => setLoading(false))
+                  .then(() => {
+                    setLoading(false);
+                    navigation.goBack();
+                  })
                   .catch((e) => {
                     console.warn(e);
                   });
