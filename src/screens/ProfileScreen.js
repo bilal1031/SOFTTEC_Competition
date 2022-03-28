@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "white",
     marginTop: 10,
-    backgroundColor: "grey",
+    // backgroundColor: "grey",
   },
   profileEmail: {
     fontSize: 16,

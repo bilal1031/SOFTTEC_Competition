@@ -1,6 +1,8 @@
 import {
   androidClientIdGoogle,
   androidStandaloneAppClientId,
+  iosClientIdGoogle,
+  iosStandaloneAppClientId,
 } from "../config/APIKeys";
 import * as Google from "expo-google-app-auth";
 import { auth, db, googleAuthProvider } from "../config/firebase";
@@ -23,9 +25,9 @@ export const googleAuth = async (setIsLogged) => {
   try {
     const result = await Google.logInAsync({
       androidClientId: androidClientIdGoogle,
-      // iosClientId: iosClientIdGoogle,
+      iosClientId: iosClientIdGoogle,
       androidStandaloneAppClientId: androidStandaloneAppClientId,
-      // iosStandaloneAppClientId: iosStandaloneAppClientId,
+      iosStandaloneAppClientId: iosStandaloneAppClientId,
       behavior: "system",
       scopes: ["profile", "email"],
     });

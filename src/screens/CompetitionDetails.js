@@ -273,7 +273,7 @@ const CompetitionDetails = ({ route, navigation }) => {
                     marginTop: 20,
                   }}
                 >
-                  {"Apply now: " + data.fee}
+                  {"Apply now: " + data.fee + "/-"}
                 </Button>
               )}
             </>

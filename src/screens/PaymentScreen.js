@@ -12,7 +12,7 @@ const API_URL = "https://payforpost.herokuapp.com";
 
 const PaymentScreen = ({ navigation, route }) => {
   const [cardDetails, setCardDetails] = useState({});
-  const { confirmPayment, loading } = useConfirmPayment();
+  const { confirmPayment } = useConfirmPayment();
   let competitionID = "",
     amount = route.params.amount;
 
@@ -21,14 +21,13 @@ const PaymentScreen = ({ navigation, route }) => {
   if (forParticipants) competitionID = route.params.competitionID;
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
   const handleDone = () => {
+    setModalVisible(false);
     navigation.popToTop();
-    toggleModal();
   };
+
   const MyModal = () => (
     <Modal isVisible={isModalVisible}>
       <View
@@ -92,6 +91,8 @@ const PaymentScreen = ({ navigation, route }) => {
     };
 
     try {
+      setLoading(true);
+
       const { clientSecret, error } = await fetchPaymentIntentClientSecret();
 
       if (error) {
@@ -106,8 +107,6 @@ const PaymentScreen = ({ navigation, route }) => {
         if (error) {
           Alert.alert("Error!", error.message);
         } else if (paymentIntent) {
-          setModalVisible(true);
-
           if (forParticipants) {
             firebase
               .firestore()
@@ -118,6 +117,10 @@ const PaymentScreen = ({ navigation, route }) => {
                 participantsID: firebase.firestore.FieldValue.arrayUnion(
                   firebase.auth().currentUser.uid
                 ),
+              })
+              .then(() => {
+                setLoading(false);
+                setModalVisible(true);
               });
           } else {
             // update sponser data on firebase
@@ -128,6 +131,10 @@ const PaymentScreen = ({ navigation, route }) => {
               .doc(firebase.auth().currentUser.email.toLowerCase())
               .update({
                 isSponsered: true,
+              })
+              .then(() => {
+                setLoading(false);
+                setModalVisible(true);
               });
           }
         }
@@ -163,7 +170,6 @@ const PaymentScreen = ({ navigation, route }) => {
         placeholder={{
           number: "•••• •••• •••• ••••",
         }}
-        cardStyle={styles.card}
         style={styles.cardContainer}
         onCardChange={(cardDetails) => {
           setCardDetails(cardDetails);
